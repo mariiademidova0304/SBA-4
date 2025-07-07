@@ -4,6 +4,7 @@ const deadlineInput = document.getElementById(`task-deadline`);
 const statusSelect = document.getElementById(`task-status`);
 const addTaskButton = document.getElementById(`add-task`);
 const taskList = document.getElementById(`task-list`);
+const buttonBox = document.getElementById(`buttons-container`);
 
 //creating empty array to store tasks
 let tasks = [];
@@ -16,6 +17,11 @@ window.addEventListener(`load`, () => {
         tasks.forEach((task) => {
             renderTask(task);
         })
+        ///////adding a filter button if there are any existing tasks
+        const filterButton = document.createElement(`button`);
+        filterButton.textContent = "Filter by Status";
+        filterButton.classList.add(`filter-status`);
+        buttonBox.appendChild(filterButton);
     }
 })
 
