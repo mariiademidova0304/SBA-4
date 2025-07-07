@@ -8,6 +8,11 @@ const taskList = document.getElementById(`task-list`);
 //creating empty array to store tasks
 let tasks = [];
 
+//rendering existing tasks on page load
+window.addEventListener(`load`, () => {
+    
+})
+
 //adding event listener for Task Button to create and object, push it into the array and save to local storage
 addTaskButton.addEventListener(`click`, () => {
     console.log(`clicked`)
@@ -16,6 +21,8 @@ addTaskButton.addEventListener(`click`, () => {
         category: categoryInput.value,
         deadline: deadlineInput.value,
         status: statusSelect.value,
+        ///////////////added and id to change tasks later
+        id: Date.now().toString(36)+Math.floor(Math.random()*100).toString(36),
     }
     console.log(newTask);
     renderTask(newTask);
@@ -26,6 +33,8 @@ addTaskButton.addEventListener(`click`, () => {
 //make a function to render a task li
 function renderTask(task){
     let newTaskItem = document.createElement(`li`);
+    /////adding id to allow editing
+    newTaskItem.id = task.id;
     newTaskItem.innerHTML = `<span>${task.name}</span><span>${task.category}</span><span>${task.deadline}</span>`;
     //cloning select
     let editableStatus = statusSelect.cloneNode(true);
@@ -33,5 +42,11 @@ function renderTask(task){
     newTaskItem.appendChild(editableStatus);
     taskList.appendChild(newTaskItem);
 }
+
+//////adding event listener for changes in status
+taskList.addEventListener(`change`, (event) => {
+    let updatedStatus = event.target.value;
+    console.log(`current select`, updatedStatus);
+})
 
 
