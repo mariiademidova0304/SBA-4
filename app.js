@@ -51,8 +51,13 @@ function renderTask(task) {
 
 //////adding event listener for changes in status
 taskList.addEventListener(`change`, (event) => {
-    let updatedStatus = event.target.value;
+    const updatedStatus = event.target.value;
     console.log(`current select`, updatedStatus);
+    const updatedTask = event.target.closest(`li`);
+    const updatedTaskId = updatedTask.id;
+    const updTaskObject = tasks.find((task) => task.id === updatedTaskId);
+    updTaskObject.status = updatedStatus;
+    localStorage.setItem(`existingTasks`, JSON.stringify(tasks));
 })
 
 
