@@ -1,0 +1,6 @@
+.input-container{
+    display: flex;
+    max-width: 50vw;
+    justify-content:space-around;
+    margin-bottom: 10px;
+}
