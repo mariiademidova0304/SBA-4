@@ -17,11 +17,26 @@ window.addEventListener(`load`, () => {
         tasks.forEach((task) => {
             renderTask(task);
         })
-        ///////adding a filter button if there are any existing tasks
-        const filterButton = document.createElement(`button`);
-        filterButton.textContent = "Filter by Status";
-        filterButton.classList.add(`filter-status`);
-        buttonBox.appendChild(filterButton);
+        ///////adding a filter button for not started tasks
+        const filterNotStartedButton = document.createElement(`button`);
+        filterNotStartedButton.textContent = "Not Started";
+        filterNotStartedButton.classList.add(`not-started`);
+        buttonBox.appendChild(filterNotStartedButton);
+        ///////adding a filter button for in progress tasks
+        const filterInProgressButton = document.createElement(`button`);
+        filterInProgressButton.textContent = "In Progress";
+        filterInProgressButton.classList.add(`in-progress`);
+        buttonBox.appendChild(filterInProgressButton);
+        ///////adding a filter button for completed tasks
+        const filterCompletedButton = document.createElement(`button`);
+        filterCompletedButton.textContent = "Completed";
+        filterCompletedButton.classList.add(`completed`);
+        buttonBox.appendChild(filterCompletedButton);
+        ///////adding a filter button for all tasks
+        const filterAllTasksButton = document.createElement(`button`);
+        filterAllTasksButton.textContent = "All Tasks";
+        filterAllTasksButton.classList.add(`all-tasks`);
+        buttonBox.appendChild(filterAllTasksButton);
     }
 })
 
@@ -64,6 +79,18 @@ taskList.addEventListener(`change`, (event) => {
     const updTaskObject = tasks.find((task) => task.id === updatedTaskId);
     updTaskObject.status = updatedStatus;
     localStorage.setItem(`existingTasks`, JSON.stringify(tasks));
+})
+
+buttonBox.addEventListener(`click`, (event) => {
+    if(event.target.contains(`not-started`)){
+        let filteredTasks = tasks.filter((task) => task.status === `not started`);
+    } else if (event.target.contains(`in-progress`)){
+        let filteredTasks = tasks.filter((task) => task.status === `in progress`);
+    } else if (event.target.contains(`completed`)){
+        let filteredTasks = tasks.filter((task) => task.status === `completed`);
+    } else if (event.target.contains(`all-tasks`)){
+        let filteredTasks = tasks;
+    }
 })
 
 
