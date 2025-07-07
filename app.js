@@ -26,7 +26,11 @@ addTaskButton.addEventListener(`click`, () => {
 //make a function to render a task li
 function renderTask(task){
     let newTaskItem = document.createElement(`li`);
-    newTaskItem.innerHTML = `<span>${task.name}</span><span>${task.category}</span><span>${task.deadline}</span><span>${task.status}</span>`;
+    newTaskItem.innerHTML = `<span>${task.name}</span><span>${task.category}</span><span>${task.deadline}</span>`;
+    //cloning select
+    let editableStatus = statusSelect.cloneNode(true);
+    editableStatus.value = statusSelect.value;
+    newTaskItem.appendChild(editableStatus);
     taskList.appendChild(newTaskItem);
 }
 
