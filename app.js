@@ -17,32 +17,15 @@ window.addEventListener(`load`, () => {
         tasks.forEach((task) => {
             renderTask(task);
         })
-        ///////adding a filter button for not started tasks
-        const filterNotStartedButton = document.createElement(`button`);
-        filterNotStartedButton.textContent = "Not Started";
-        filterNotStartedButton.classList.add(`not-started`);
-        buttonBox.appendChild(filterNotStartedButton);
-        ///////adding a filter button for in progress tasks
-        const filterInProgressButton = document.createElement(`button`);
-        filterInProgressButton.textContent = "In Progress";
-        filterInProgressButton.classList.add(`in-progress`);
-        buttonBox.appendChild(filterInProgressButton);
-        ///////adding a filter button for completed tasks
-        const filterCompletedButton = document.createElement(`button`);
-        filterCompletedButton.textContent = "Completed";
-        filterCompletedButton.classList.add(`completed`);
-        buttonBox.appendChild(filterCompletedButton);
-        ///////adding a filter button for all tasks
-        const filterAllTasksButton = document.createElement(`button`);
-        filterAllTasksButton.textContent = "All Tasks";
-        filterAllTasksButton.classList.add(`all-tasks`);
-        buttonBox.appendChild(filterAllTasksButton);
+        buttonBox.innerHTML = `<button class="not-started">Not Started</button>
+        <button class="in-progress">In Progress</button>
+        <button class="completed">Completed</button>
+        <button class="all-tasks">All Tasks</button>`;
     }
 })
 
 //adding event listener for Task Button to create and object, push it into the array and save to local storage
 addTaskButton.addEventListener(`click`, () => {
-    console.log(`clicked`)
     let newTask = {
         name: taskNameInput.value,
         category: categoryInput.value,
@@ -51,7 +34,11 @@ addTaskButton.addEventListener(`click`, () => {
         ///////////////added and id to change tasks later
         id: Date.now().toString(36) + Math.floor(Math.random() * 100).toString(36),
     }
-    console.log(newTask);
+    //adding buttons when a task is added - need to modify so it doesn't run every time?
+    buttonBox.innerHTML = `<button class="not-started">Not Started</button>
+        <button class="in-progress">In Progress</button>
+        <button class="completed">Completed</button>
+        <button class="all-tasks">All Tasks</button>`;
     renderTask(newTask);
     tasks.push(newTask);
     localStorage.setItem(`existingTasks`, JSON.stringify(tasks));
@@ -81,16 +68,24 @@ taskList.addEventListener(`change`, (event) => {
     localStorage.setItem(`existingTasks`, JSON.stringify(tasks));
 })
 
+//adding event listener to the button box to filter tasks
 buttonBox.addEventListener(`click`, (event) => {
-    if(event.target.contains(`not-started`)){
-        let filteredTasks = tasks.filter((task) => task.status === `not started`);
-    } else if (event.target.contains(`in-progress`)){
-        let filteredTasks = tasks.filter((task) => task.status === `in progress`);
-    } else if (event.target.contains(`completed`)){
-        let filteredTasks = tasks.filter((task) => task.status === `completed`);
-    } else if (event.target.contains(`all-tasks`)){
-        let filteredTasks = tasks;
+    let filterStatus = event.target.className;
+    let filteredTasks;
+
+    switch (filterStatus) {
+        case `not-started`: filteredTasks = tasks.filter((task) => task.status === `not started`);
+            break;
+        case `in-progress`: filteredTasks = tasks.filter((task) => task.status === `in progress`);
+            break;
+        case `completed`: filteredTasks = tasks.filter((task) => task.status === `completed`);
+            break;
+        case `all-tasks`: filteredTasks = tasks;
     }
+    taskList.innerHTML = ``;
+    filteredTasks.forEach((task) => {
+        renderTask(task);
+    })
 })
 
 

@@ -12,6 +12,9 @@ ul{
 li{
     display: flex;
     gap: 10px;
+    border: 1px solid blanchedalmond;
+    max-width: fit-content;
+    padding: 1rem;
 }
 
 #buttons-container {
