@@ -96,20 +96,19 @@ buttonBox.addEventListener(`click`, (event) => {
     })
 })
 
-//checking if a task is overdue and returning either task's id or null
+//checking if a task is overdue and adding or removing a badge
 function checkOverdue(task, taskLiItem) {
     const currentDate = new Date();
     const taskDeadline = new Date(task.deadline);
-    if (task.status !== `completed`) {
-        if (currentDate.getTime() > taskDeadline.getTime()) {
+    const existingBadge = taskLiItem.querySelector(`.badge`);
+    if(existingBadge && task.status === `completed`){
+        existingBadge.remove();
+    } else if (!existingBadge && task.status !== `completed` && currentDate.getTime() > taskDeadline.getTime()) {
             const overdueBadge = document.createElement(`span`);
             overdueBadge.innerText = "Overdue";
             overdueBadge.className = "badge bg-danger";
             taskLiItem.appendChild(overdueBadge);
-        } else {
-            return;
-        }
+        } 
     }
-}
 
 
