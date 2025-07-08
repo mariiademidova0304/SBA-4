@@ -26,14 +26,21 @@ window.addEventListener(`load`, () => {
 
 //adding event listener for Task Button to create and object, push it into the array and save to local storage
 addTaskButton.addEventListener(`click`, () => {
-    let newTask = {
-        name: taskNameInput.value,
-        category: categoryInput.value,
-        deadline: deadlineInput.value,
-        status: statusSelect.value,
-        ///////////////added and id to change tasks later
-        id: Date.now().toString(36) + Math.floor(Math.random() * 100).toString(36),
-    }
+    if (taskNameInput.value === ``) {
+        alert(`Please, fill in task name field`);
+    } else if (categoryInput.value === ``) {
+        alert(`Please, add a category`)
+    } else if (deadlineInput.value === ``) {
+        alert(`Please, add a deadline`)
+    } else {
+        let newTask = {
+            name: taskNameInput.value,
+            category: categoryInput.value,
+            deadline: deadlineInput.value,
+            status: statusSelect.value,
+            ///////////////added and id to change tasks later
+            id: Date.now().toString(36) + Math.floor(Math.random() * 100).toString(36),
+        }
     //adding buttons when a task is added - need to modify so it doesn't run every time?
     buttonBox.innerHTML = `<button class="not-started">Not Started</button>
         <button class="in-progress">In Progress</button>
@@ -42,6 +49,11 @@ addTaskButton.addEventListener(`click`, () => {
     renderTask(newTask);
     tasks.push(newTask);
     localStorage.setItem(`existingTasks`, JSON.stringify(tasks));
+    taskNameInput.value = ``;
+    categoryInput.value = ``;
+    deadlineInput.value = ``;
+    statusSelect.selectedIndex = 0;
+    }
 })
 
 //make a function to render a task li
@@ -55,13 +67,7 @@ function renderTask(task) {
     editableStatus.value = task.status;
     newTaskItem.appendChild(editableStatus);
     //checking whether the task is overdue and adding a badge
-    let overdueId = checkOverdue(task, newTaskItem);
-    // if (overdueId !== null){
-    //     const overdueBadge = document.createElement(`span`);
-    //     overdueBadge.innerText = "Overdue";
-    //     overdueBadge.className = `badge bg-danger`;
-    //     newTaskItem.appendChild(overdueBadge);
-    // }
+    checkOverdue(task, newTaskItem);
     taskList.appendChild(newTaskItem);
 }
 
@@ -73,7 +79,7 @@ taskList.addEventListener(`change`, (event) => {
     const updTaskObject = tasks.find((task) => task.id === updatedTaskId);
     updTaskObject.status = updatedStatus;
     localStorage.setItem(`existingTasks`, JSON.stringify(tasks));
-    checkOverdue(updTaskObject,updatedTask);
+    checkOverdue(updTaskObject, updatedTask);
 })
 
 //adding event listener to the button box to filter tasks
@@ -101,14 +107,14 @@ function checkOverdue(task, taskLiItem) {
     const currentDate = new Date();
     const taskDeadline = new Date(task.deadline);
     const existingBadge = taskLiItem.querySelector(`.badge`);
-    if(existingBadge && task.status === `completed`){
+    if (existingBadge && task.status === `completed`) {
         existingBadge.remove();
     } else if (!existingBadge && task.status !== `completed` && currentDate.getTime() > taskDeadline.getTime()) {
-            const overdueBadge = document.createElement(`span`);
-            overdueBadge.innerText = "Overdue";
-            overdueBadge.className = "badge bg-danger";
-            taskLiItem.appendChild(overdueBadge);
-        } 
+        const overdueBadge = document.createElement(`span`);
+        overdueBadge.innerText = "Overdue";
+        overdueBadge.className = "badge bg-danger";
+        taskLiItem.appendChild(overdueBadge);
     }
+}
 
 
