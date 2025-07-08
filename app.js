@@ -68,12 +68,12 @@ function renderTask(task) {
 //////adding event listener for changes in status
 taskList.addEventListener(`change`, (event) => {
     const updatedStatus = event.target.value;
-    console.log(`current select`, updatedStatus);
     const updatedTask = event.target.closest(`li`);
     const updatedTaskId = updatedTask.id;
     const updTaskObject = tasks.find((task) => task.id === updatedTaskId);
     updTaskObject.status = updatedStatus;
     localStorage.setItem(`existingTasks`, JSON.stringify(tasks));
+    checkOverdue(updTaskObject,updatedTask);
 })
 
 //adding event listener to the button box to filter tasks
@@ -97,20 +97,19 @@ buttonBox.addEventListener(`click`, (event) => {
 })
 
 //checking if a task is overdue and returning either task's id or null
-function checkOverdue(task, taskLiItem){
+function checkOverdue(task, taskLiItem) {
     const currentDate = new Date();
-    console.log(`today's date`, currentDate);
     const taskDeadline = new Date(task.deadline);
-    console.log(`task deadline`,taskDeadline);
-    if(currentDate.getTime() > taskDeadline.getTime()){
-        const overdueBadge = document.createElement(`span`);
-        overdueBadge.innerText = "Overdue";
-        overdueBadge.className = "badge bg-danger";
-        taskLiItem.appendChild(overdueBadge);
-    } else {
-        return null;
+    if (task.status !== `completed`) {
+        if (currentDate.getTime() > taskDeadline.getTime()) {
+            const overdueBadge = document.createElement(`span`);
+            overdueBadge.innerText = "Overdue";
+            overdueBadge.className = "badge bg-danger";
+            taskLiItem.appendChild(overdueBadge);
+        } else {
+            return;
+        }
     }
-
 }
 
 
