@@ -54,6 +54,14 @@ function renderTask(task) {
     let editableStatus = statusSelect.cloneNode(true);
     editableStatus.value = task.status;
     newTaskItem.appendChild(editableStatus);
+    //checking whether the task is overdue and adding a badge
+    let overdueId = checkOverdue(task, newTaskItem);
+    // if (overdueId !== null){
+    //     const overdueBadge = document.createElement(`span`);
+    //     overdueBadge.innerText = "Overdue";
+    //     overdueBadge.className = `badge bg-danger`;
+    //     newTaskItem.appendChild(overdueBadge);
+    // }
     taskList.appendChild(newTaskItem);
 }
 
@@ -87,5 +95,22 @@ buttonBox.addEventListener(`click`, (event) => {
         renderTask(task);
     })
 })
+
+//checking if a task is overdue and returning either task's id or null
+function checkOverdue(task, taskLiItem){
+    const currentDate = new Date();
+    console.log(`today's date`, currentDate);
+    const taskDeadline = new Date(task.deadline);
+    console.log(`task deadline`,taskDeadline);
+    if(currentDate.getTime() > taskDeadline.getTime()){
+        const overdueBadge = document.createElement(`span`);
+        overdueBadge.innerText = "Overdue";
+        overdueBadge.className = "badge bg-danger";
+        taskLiItem.appendChild(overdueBadge);
+    } else {
+        return null;
+    }
+
+}
 
 
